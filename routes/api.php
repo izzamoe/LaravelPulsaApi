@@ -12,11 +12,12 @@ Route::prefix('auth')->group(function () {
     Route::get('/signout', [AuthController::class, 'SignOut'])->middleware('auth:sanctum');
 });
 
-//get all token
-Route::get('/tokens', function (Request $request) {
-    return $request->user()->tokens;
-})->middleware('auth:sanctum');
-
-Route::get('/me', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// group routing protected
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', function (Request $request) {
+        return $request->user();
+    });
+    Route::get('/tokens', function (Request $request) {
+        return $request->user()->tokens;
+    });
+});
